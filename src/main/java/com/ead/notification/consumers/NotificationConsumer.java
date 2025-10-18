@@ -20,7 +20,7 @@ public class NotificationConsumer {
     }
 
     @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(value = "${ead.broker.notificationCommandQueue.name}", durable = "true"),
+            value = @Queue(value = "${ead.broker.queue.notificationCommandQueue.name}", durable = "true"),
             exchange = @Exchange(value = "${ead.broker.exchange.notificationCommandExchange}", type = ExchangeTypes.TOPIC, ignoreDeclarationExceptions = "true"),
             key = "${ead.broker.key.notificationCommandKey}"
     ))
