@@ -1,14 +1,13 @@
 package com.ead.notification.controller;
 
+import com.ead.notification.dtos.NotificationDto;
 import com.ead.notification.dtos.NotificationPageDto;
 import com.ead.notification.service.NotificationService;
-import org.springframework.data.domain.Page;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -28,6 +27,16 @@ public class UserNotificationController {
     ) {
         NotificationPageDto notifications = notificationService.getAllNotificationsByUser(userId, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(notifications);
+    }
+
+    @PutMapping("/users/{userId}/notifications/{notificationId}")
+    public ResponseEntity<Object> markNotificationAsRead(
+            @PathVariable UUID userId,
+            @PathVariable UUID notificationId,
+            @RequestBody @Valid NotificationDto notificationDto
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(notificationService.updateNotification(notificationDto,
+                notificationService.findByNotificationIdAndUserId(notificationId, userId)));
     }
 
 }

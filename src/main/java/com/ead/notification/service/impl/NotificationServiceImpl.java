@@ -1,8 +1,10 @@
 package com.ead.notification.service.impl;
 
 import com.ead.notification.dtos.NotificationCommandDto;
+import com.ead.notification.dtos.NotificationDto;
 import com.ead.notification.dtos.NotificationPageDto;
 import com.ead.notification.enums.NotificationStatus;
+import com.ead.notification.exceptions.NotFoundException;
 import com.ead.notification.models.NotificationModel;
 import com.ead.notification.repository.NotificationRepository;
 import com.ead.notification.service.NotificationService;
@@ -41,4 +43,20 @@ public class NotificationServiceImpl implements NotificationService {
         );
         return NotificationPageDto.from(notificationsPage);
     }
+
+    @Override
+    public NotificationModel findByNotificationIdAndUserId(UUID notificationId, UUID userId) {
+        var NotificationModel = notificationRepository.findByNotificationIdAndUserId(notificationId, userId);
+        if (NotificationModel.isEmpty()) {
+            throw new NotFoundException("Notification not found for user");
+        }
+        return NotificationModel.get();
+    }
+
+    @Override
+    public NotificationModel updateNotification(NotificationDto notificationDto, NotificationModel notificationModel) {
+        notificationModel.setNotificationStatus(notificationDto.notificationStatus());
+        return notificationRepository.save(notificationModel);
+    }
+
 }
