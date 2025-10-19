@@ -1,15 +1,18 @@
 package com.ead.notification.service.impl;
 
 import com.ead.notification.dtos.NotificationCommandDto;
+import com.ead.notification.dtos.NotificationPageDto;
 import com.ead.notification.enums.NotificationStatus;
 import com.ead.notification.models.NotificationModel;
 import com.ead.notification.repository.NotificationRepository;
 import com.ead.notification.service.NotificationService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.UUID;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
@@ -27,5 +30,15 @@ public class NotificationServiceImpl implements NotificationService {
         notificationModel.setCreationDate(LocalDateTime.now(ZoneId.of("UTC")));
         notificationModel.setNotificationStatus(NotificationStatus.CREATED);
         return notificationRepository.save(notificationModel);
+    }
+
+    @Override
+    public NotificationPageDto getAllNotificationsByUser(UUID userId, Pageable pageable) {
+        var notificationsPage = notificationRepository.findAllByUserIdAndNotificationStatus(
+                userId,
+                NotificationStatus.CREATED,
+                pageable
+        );
+        return NotificationPageDto.from(notificationsPage);
     }
 }
