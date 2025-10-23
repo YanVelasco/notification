@@ -1,7 +1,6 @@
 package com.ead.notification.config.security;
 
 
-
 import com.ead.notification.config.security.jwt.AuthenticationJwtFilter;
 import com.ead.notification.config.security.jwt.JwtProvider;
 import jakarta.servlet.DispatcherType;
@@ -32,7 +31,8 @@ public class WebSecurityConfig {
     final JwtProvider jwtProvider;
     final AccessDeniedHandler accessDeniedHandler;
 
-    public WebSecurityConfig(AuthenticationEntryPointImpl authenticationEntryPoint, JwtProvider jwtProvider, AccessDeniedHandler accessDeniedHandler) {
+    public WebSecurityConfig(AuthenticationEntryPointImpl authenticationEntryPoint, JwtProvider jwtProvider,
+                             AccessDeniedHandler accessDeniedHandler) {
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.jwtProvider = jwtProvider;
         this.accessDeniedHandler = accessDeniedHandler;
@@ -65,9 +65,9 @@ public class WebSecurityConfig {
                                 .accessDeniedHandler(accessDeniedHandler)
                 )
                 .authorizeHttpRequests(authorize ->
-                                authorize
-                                        .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
-                                        .anyRequest().authenticated()
+                        authorize
+                                .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
+                                .anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
